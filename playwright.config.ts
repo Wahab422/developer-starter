@@ -1,6 +1,7 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { devices } from '@playwright/test';
-
+import { createServer } from 'vite';
+import glsl from 'vite-plugin-glsl';
 declare const process: {
   env: {
     CI?: string;
@@ -78,6 +79,14 @@ const config: PlaywrightTestConfig = {
     command: 'pnpm dev',
     port: 3000,
     reuseExistingServer: true,
+  },
+
+  /* Start Vite server with GLSL support */
+  async setup() {
+    const server = await createServer({
+      plugins: [glsl()],
+    });
+    await server.listen();
   },
 };
 
